@@ -5,23 +5,46 @@ date:   2016-02-22
 categories: posts
 ---
 
-Sunner or later at developing your super cool enterprise level SPA,
-your will meet it — the big table. For the sake of clarity, under big tables
-I mean tables from 1k to 100k records.
+Sunner or later at developing your super cool enterprise level SPA, your will meet it — the big table. For the sake of clarity, under big tables I mean tables from 1k to 100k records.
 
-// Why rendering big tables matters? Because paginaation sucks. (? really)
+> Why rendering big tables matters? Because paginaation sucks. (? really)
 
-Modern descktop browsers could easely operate with such amount of records, so it's
-some times usefull to upload them all at once. You could quickly filter and sort them,
-without loosing time on network delays.
+Modern descktop browsers could easely operate with such amount of records, so it's some times usefull to upload them all at once. You could quickly filter and sort them, without loosing time on network delays.
 
 If we have to show table we could show everything at once. But such solution is
-severe flawed. Rendering of a big table takes a lot, what degradetes user expirience.
+severe flawed. Rendering of a big table takes a lot of time, what degradetes user expirience.
 
 Here few examples of rendering full table at one go.
 
 ...
 
+Okay. We saw thar rendering all your data at once is not a good idea. So it is right time for optimisation!
+
+The main idea is deadly simple. What if we will render only rows which are visible. In average there are around few dozens of rows fitted in the window. So it is possible to render only them. And when user scrolls up or down render new portion of rows and remove old ones.
+
+Lets create React component for optimizing long lists and tables rendering.
+
+> describe key concepst and parts of the component.
+
+**Nasty scroll**
+
+> intro to events section
+
+The sad truth is, that messing with the scroll in the browser is almost always painful. There are two ways to handle scroll. First is `scroll` event and the second one is `wheel`, `mousewheel` (and ancient `MozMousePixelScroll`, `DOMMouseScroll`) events.
+
+Scroll event fired when you scroll content in window or in div element with `overflow: scroll | auto` when the content height longer than container. It could be triggered by any means (arrow keys, scrollbar, mouse wheel or touch pad). It has only one drawback — you cannot cancel it!
+
+This leads to very unplesant case. When you have a window with scroll and some element with its own scroll. Then when you scroll element container down the scroll event will be fired on window and it begin scrolls too.
+
+> example with scroll in scroll.
+
+And you cannot do anythig with it.
+
+Wheel event and all his non-standard relatives behaves differently. It fires when ever the user uses the mouse wheel or trackpad. The page does not have to scroll in order to fire this event. So you cold implement completly custom scroll if you want...
+
+> * write more about scroll events
+
+[See more about scroll events in...](https://github.com/facebook/fixed-data-table/blob/cf28c0e78a3859c9a6e5d94fc84912e28d64f62a/src/vendor_upstream/dom/normalizeWheel.js)
 
 
 # Plan
@@ -31,6 +54,12 @@ Here few examples of rendering full table at one go.
 * Render only visible table
 * Requirements
 * Step-by-step
+    * Document scroll
+    * Viewport and onScroll
+    * Rows height: constant and variable
+    * Resize
+    * Lift the side effects up
+    * Testing
 * Examples
 * About mobile
 * React-canvas rendering
