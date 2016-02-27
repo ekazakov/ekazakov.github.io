@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Little Story About Big Tables"
+title:  "Big Tables and React"
 date:   2016-02-22
 categories: posts
 ---
@@ -22,9 +22,38 @@ Okay. We saw thar rendering all your data at once is not a good idea. So it is r
 
 The main idea is deadly simple. What if we will render only rows which are visible. In average there are around few dozens of rows fitted in the window. So it is possible to render only them. And when user scrolls up or down render new portion of rows and remove old ones.
 
-Lets create React component for optimizing long lists and tables rendering.
+Lets create component for optimizing long lists and tables rendering. For this task will be using React. Of course you could use any framework or none. But React nicely fits for such kind of tasks.
 
-> describe key concepst and parts of the component.
+Basic requirements for ours component:
+
+* Render only visible portion of records
+* Render new portion of rows on scroll event
+* Correctly handle rows of the different height
+* Emulate content height for correct scroll displaying.
+* Handle window resize event
+
+**Body parts**
+
+> Basic exmaple and preparations
+
+```javascript
+class Scrollable extends React.Component {
+    constructor(...args) {
+        super(...args);
+        // initialize component state with window
+        // height and current scroll position
+        this.state = {
+            viewportHeight: window.innerHeight,
+            scrollTop: window.pageYOffset,
+            offsetTopIndex: 0 // index of first visible record
+        };
+    }
+
+    render() {
+
+    }
+}
+```
 
 **Nasty scroll**
 
