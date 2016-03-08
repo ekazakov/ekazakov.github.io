@@ -27,4 +27,7 @@ kramdown:
   input: GFM
   syntax_highlighter: rouge
 
-exclude: [Gemfile, Gemfile.lock]
+exclude: [Gemfile, Gemfile.lock, Dockerfile, .dockerignore]
+
+host: 0.0.0.0
+port: 4001
