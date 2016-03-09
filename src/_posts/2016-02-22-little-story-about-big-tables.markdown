@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Big Tables and React!!1"
+title:  "Big Tables and React"
 date:   2016-02-22
 categories: posts
 ---
@@ -14,7 +14,7 @@ Modern descktop browsers could easely operate with such amount of records, so it
 If we have to show table we could show everything at once. But such solution is
 severe flawed. Rendering of a big table takes a lot of time, what degradetes user expirience.
 
-Here few examples of rendering full table at one go.
+> Here few examples of rendering full table at one go.
 
 ...
 
@@ -37,24 +37,72 @@ Basic requirements for ours component:
 > Basic exmaple and preparations
 
 ```javascript
-class Scrollable extends React.Component {
-    constructor(...args) {
-        super(...args);
-        // initialize component state with window
-        // height and current scroll position
-        this.state = {
-            viewportHeight: window.innerHeight,
-            scrollTop: window.pageYOffset,
-            offsetTopIndex: 0 // index of first visible record
-        };
-    }
-
+class TableRow extends React.Component {
     render() {
-
+        const {row} = this.props;
+        return <tr style={{height: 40}}>
+            <td className="index"><div>{row.id}</div></td>
+            <td className="name"><div>{row.name}</div></td>
+            <td className="address"><div>{row.address}</div></td>
+        </tr>;
     }
 }
 ```
 
+```javascript
+class TableRowsSet extends React.Component {
+    render() {
+        const {rows, from, to} = this.props;
+        return <table>
+            <tbody>
+                {rows.slice(from, to).map(row => <TableRow key={row.id} row={row}/>)}
+            </tbody>
+        </table>;
+    }
+}
+```
+
+```javascript
+class App extends React.Component {
+    render() {
+        const {rows} = this.props;
+        const options = {
+            size: rows.length,
+            rowHeight: 40
+        };
+        return <div>
+            <div id="table">
+                <Scrollable {...options} >
+                    <TableRowsSet rows={rows}/>
+                </Scrollable>
+            </div>
+        </div>;
+    }
+}
+```
+
+```javascript
+class Scrollable extends React.Component {
+    constructor(...args) {
+        super(...args);
+        this.state = {
+            viewportHeight: window.innerHeight,
+            scrollTop: window.pageYOffset
+        };
+    }
+
+    render() {
+        const from = 0;
+        const to = this.state.viewportHeight / this.props.rowHeight;
+        return <div>
+            {React.Children.map(
+                this.props.children,
+                (child) => React.cloneElement(child, {from, to}, child.props.children))}
+        </div>;
+    }
+}
+```
+<!--
 **Nasty scroll**
 
 > intro to events section
@@ -74,7 +122,7 @@ Wheel event and all his non-standard relatives behaves differently. It fires whe
 > * write more about scroll events
 
 [See more about scroll events in...](https://github.com/facebook/fixed-data-table/blob/cf28c0e78a3859c9a6e5d94fc84912e28d64f62a/src/vendor_upstream/dom/normalizeWheel.js)
-
+ -->
 
 # Plan
 
