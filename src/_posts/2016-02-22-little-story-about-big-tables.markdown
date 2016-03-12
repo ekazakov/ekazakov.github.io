@@ -34,7 +34,7 @@ Basic requirements for ours component:
 
 **Body parts**
 
-> Basic exmaple and preparations
+Lets prepare basic code for our poject.
 
 ```javascript
 class TableRow extends React.Component {
@@ -48,6 +48,7 @@ class TableRow extends React.Component {
     }
 }
 ```
+`TableRow` just renders table row and nothing more.
 
 ```javascript
 class TableRowsSet extends React.Component {
@@ -61,6 +62,8 @@ class TableRowsSet extends React.Component {
     }
 }
 ```
+`TableRowsSet` is responsible for rendering rows slice. It receives all rows and `from` and `to` params, which specifies what portion of rows to render.
+
 
 ```javascript
 class App extends React.Component {
@@ -81,6 +84,8 @@ class App extends React.Component {
 }
 ```
 
+Application component is very simple too. It plainly wraps `TableRowsSet` in `Scrollable` component. So every component is simple and dumb, but through composition, they archive more complex behavior.
+
 ```javascript
 class Scrollable extends React.Component {
     constructor(...args) {
@@ -93,7 +98,7 @@ class Scrollable extends React.Component {
 
     render() {
         const from = 0;
-        const to = this.state.viewportHeight / this.props.rowHeight;
+        const to = Math.ceil(this.state.viewportHeight / this.props.rowHeight);
         return <div>
             {React.Children.map(
                 this.props.children,
@@ -102,6 +107,13 @@ class Scrollable extends React.Component {
     }
 }
 ```
+
+`Scrollable` a little bit trickier. It initializes state with window height and scrollOffset. In `render` method it calculates `from` and `to` indexes. At this moment `from` is always 0 and `to` is show how much row height fits in window. `Math.ceil` round fractions to a nearest greater integer. This allows showing rows which not fully fit in the viewport.
+
+> see first example here
+
+Ok, now everything is ready to add rows rendering on scroll.
+
 <!--
 **Nasty scroll**
 

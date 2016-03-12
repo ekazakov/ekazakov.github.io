@@ -150,6 +150,15 @@ pre {
     }
 }
 
+p {
+    > code {
+        font-size: 19px;
+        padding: 1px 3px;
+        background: #EDEDED;
+        border-radius: 4px;
+        border: none;
+    }
+}
 
 
 
